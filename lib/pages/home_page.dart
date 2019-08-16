@@ -21,10 +21,10 @@ class _HomePageState extends State<HomePage> {
           future: fetch(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              final data = snapshot.data['results'];
+              List data = snapshot.data['results'];
               return Column(
                 children: <Widget>[
-                  SwiperDiy(list: data,)
+                  SwiperDiy(list: data.map((item) => item['picture']['large']).toList(),)
                 ],
               );
             } else {
@@ -38,15 +38,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // void _goGet() {
-  //   fetch().then((v) {
-  //     setState(() {
-  //       showTest = v['data'].toString();
-  //     });
-  //   })
-  //   .catchError((e) => print(e));
-  // }
-
   Future fetch() async {
     var client = Dio();
     var res = await client.get('https://randomuser.me/api/?results=5&&gender=female');
@@ -55,7 +46,7 @@ class _HomePageState extends State<HomePage> {
 }
 
 class SwiperDiy extends StatelessWidget {
-  final List list;
+  final List<String> list;
 
   SwiperDiy({Key key, this.list}): super(key: key);
 
@@ -66,7 +57,7 @@ class SwiperDiy extends StatelessWidget {
       child: Swiper(
         itemCount: list.length,
         itemBuilder: (context, index) {
-          return Image.network(list[index]['picture']['large'], fit: BoxFit.fill,);
+          return Image.network(list[index], fit: BoxFit.fill,);
         },
         autoplay: true,
         pagination: SwiperPagination(),
