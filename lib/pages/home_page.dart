@@ -17,6 +17,7 @@ class _HomePageState extends State<HomePage> {
     return Container(
       child: Scaffold(
         appBar: AppBar(title: Text('Home'),),
+        // SingleChildScrollView 防止键盘弹出导致尺寸溢出
         body: SingleChildScrollView(child: Container(
           child: Column(
             children: <Widget>[
