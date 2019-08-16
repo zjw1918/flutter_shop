@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart' as prefix0;
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -46,14 +48,20 @@ class _HomePageState extends State<HomePage> {
 }
 
 class SwiperDiy extends StatelessWidget {
-  final List<String> list;
+  final List list;
 
   SwiperDiy({Key key, this.list}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(width: 750, height: 1334)..init(context);
+    print('pixel ratio: ${ScreenUtil.pixelRatio}');
+    print('height: ${ScreenUtil.screenHeight}');
+    print('width: ${ScreenUtil.screenWidth}');
+
     return Container(
-      height: 333,
+      height: ScreenUtil().setHeight(333),
+      width: ScreenUtil().setWidth(750),
       child: Swiper(
         itemCount: list.length,
         itemBuilder: (context, index) {
