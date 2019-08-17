@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -27,7 +28,9 @@ class _HomePageState extends State<HomePage> {
               return Column(
                 children: <Widget>[
                   SwiperDiy(list: data.sublist(0, 5),),
-                  TopNav(list: data.sublist(5, 15),)
+                  TopNav(list: data.sublist(5, 15),),
+                  AdBanner(url: 'images/adbanner.jpg',),
+                  DianZhangPhone(phone: data[0]['phone'],)
                 ],
               );
             } else {
@@ -79,9 +82,16 @@ class TopNav extends StatelessWidget {
   Widget _buildItem(BuildContext context, item) {
     return InkWell(
       onTap: () { print(item['name']['first']); },
-      child: Column(children: <Widget>[
-        ClipOval(child: Image.network(item['picture']['medium'], width: ScreenUtil().setWidth(95),),),
-        Text(item['name']['first'])
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 2,
+            child: ClipOval(child: Image.network(item['picture']['medium'], width: ScreenUtil().setWidth(95),),),
+          ),
+          Expanded(
+            flex: 1,
+            child: Text(item['name']['first'],),
+          )
       ],),
     );
   }
@@ -89,7 +99,7 @@ class TopNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: ScreenUtil().setHeight(320),
+      height: ScreenUtil().setHeight(300),
       padding: EdgeInsets.all(3.0),
       child: GridView.count(
         crossAxisCount: 5,
@@ -97,5 +107,56 @@ class TopNav extends StatelessWidget {
         children: list.map((item) => _buildItem(context, item)).toList(),
       ),
     );
+  }
+}
+
+class AdBanner extends StatelessWidget {
+  final String url;
+
+  AdBanner({this.url});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Image.asset(url),
+    );
+  }
+}
+
+class DianZhangPhone extends StatelessWidget {
+  final phone;
+
+  DianZhangPhone({this.phone});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: InkWell(
+        onTap: () { _launchUrl(context); },
+        borderRadius: BorderRadius.circular(10.0),
+        child: Container(
+          height: ScreenUtil().setHeight(200),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+                Text('店长电话: '),
+                Text(phone)
+              ],
+            ),
+        ),
+      ),
+    );
+  }
+
+  void _launchUrl(BuildContext context) async {
+    // String url = 'tel:' + phone;
+    String url = 'https://baidu.com';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      print('无法拨打');
+      Scaffold.of(context).showSnackBar(SnackBar(content: Text('无法打开url')));
+    }
   }
 }
