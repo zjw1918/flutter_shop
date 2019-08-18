@@ -12,6 +12,8 @@ class IndexPage extends StatefulWidget {
 }
 
 class _IndexPageState extends State<IndexPage> {
+  final PageController pageController = PageController();
+
   final List<BottomNavigationBarItem> tabs = [
     BottomNavigationBarItem(icon: Icon(CupertinoIcons.home), title: Text('首页')),
     BottomNavigationBarItem(icon: Icon(CupertinoIcons.search), title: Text('分类')),
@@ -19,7 +21,7 @@ class _IndexPageState extends State<IndexPage> {
     BottomNavigationBarItem(icon: Icon(CupertinoIcons.profile_circled), title: Text('会员中心')),
   ];
 
-  final List pages = [
+  final List<Widget> pages = [
     HomePage(),
     CategoryPage(),
     CartPage(),
@@ -36,18 +38,21 @@ class _IndexPageState extends State<IndexPage> {
   }
 
   void onTap(index) {
+    pageController.jumpToPage(index);
+  }
+
+  void onPageChanged(index) {
     setState(() {
-      currentIndex = index;
-      currentPage = pages[currentIndex];
+     currentIndex = index; 
     });
   }
 
   @override
   Widget build(BuildContext context) {
     ScreenUtil.instance = ScreenUtil(width: 750, height: 1334)..init(context);
-    print('pixel ratio: ${ScreenUtil.pixelRatio}');
-    print('height: ${ScreenUtil.screenHeight}');
-    print('width: ${ScreenUtil.screenWidth}');
+    // print('pixel ratio: ${ScreenUtil.pixelRatio}');
+    // print('height: ${ScreenUtil.screenHeight}');
+    // print('width: ${ScreenUtil.screenWidth}');
     
     return Scaffold(
       backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
@@ -57,7 +62,12 @@ class _IndexPageState extends State<IndexPage> {
         onTap: onTap,
         type: BottomNavigationBarType.fixed,
       ),
-      body: currentPage,
+      body: PageView(
+        controller: pageController,
+        children: pages,
+        onPageChanged: onPageChanged,
+        physics: NeverScrollableScrollPhysics(),
+      ),
     );
   }
 }
