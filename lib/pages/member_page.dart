@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provide/provide.dart';
+import 'package:provider/provider.dart';
 import 'package:shop/model/counter.dart';
 
 class MemberPage extends StatelessWidget {
@@ -7,8 +7,8 @@ class MemberPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Provide<Counter>(
-          builder: (content, child, counter) => Text('${counter.value}'),
+        child: Consumer<Counter>(
+          builder: (content, counter, child) => Text('${counter.value}'),
         ),
       ),
     );

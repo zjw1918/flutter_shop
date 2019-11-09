@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provide/provide.dart';
+import 'package:provider/provider.dart';
 import '../model/counter.dart';
 
 class CartPage extends StatelessWidget {
@@ -13,13 +13,13 @@ class CartPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Provide<Counter>(
-              builder: (context, child, counter) {
+            Consumer<Counter>(
+              builder: (context, counter, child) {
                 return Text('${counter.value}', style: Theme.of(context).textTheme.display1,);
               },
             ),
             RaisedButton(
-              onPressed: () => Provide.value<Counter>(context).increment(),
+              onPressed: () => Provider.of<Counter>(context).increment(),
               
               child: Text('Press'),
             ),
@@ -28,11 +28,11 @@ class CartPage extends StatelessWidget {
                 print('down...');
                 isPressed = true;
                 while (isPressed) {
-                  Provide.value<Counter>(context).increment();
+                  Provider.of<Counter>(context).increment();
                   await Future.delayed(Duration(milliseconds: 200));
                 }
                },
-              onPointerUp: (e) { 
+              onPointerUp: (e) {
                 print('up...');
                 isPressed = false;
                },
