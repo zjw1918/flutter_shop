@@ -244,3 +244,66 @@ class Recommend extends StatelessWidget {
     );
   }
 }
+
+// 楼层标题
+class FloorTitle extends StatelessWidget {
+  final String picUrl;
+  FloorTitle({Key key, this.picUrl}): super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(8.0),
+      child: Image.network(this.picUrl),
+    );
+  }
+}
+
+// 楼层商品列表
+class FloorContent extends StatelessWidget {
+  final List goodsList;
+  FloorContent({Key key, this.goodsList}): super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          _firstRow(),
+          _otherGoods(),
+        ],
+      ),
+    );
+  }
+
+  Widget _firstRow() {
+    return Row(
+      children: <Widget>[
+        _goodsItem(goodsList[0]),
+        Column(
+          children: <Widget>[
+            _goodsItem(goodsList[1]),
+            _goodsItem(goodsList[2]),
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _otherGoods() {
+    return Row(
+      children: <Widget>[
+        _goodsItem(goodsList[3]),
+        _goodsItem(goodsList[4]),
+      ],
+    );
+  }
+
+  Widget _goodsItem(Map goods) {
+    return Container(
+      width: ScreenUtil().setWidth(375),
+      child: InkWell(
+        onTap: () { print('点击了楼层商品'); },
+        child: Image.network(goods['image']),
+      ),
+    );
+  }
+}
